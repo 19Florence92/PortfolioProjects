@@ -99,14 +99,14 @@
   
   --CREATING VIEW TO STORE DATA FOR LATER VISUALIZATIONS
 
-  CREATE VIEW PERCENTPOPULATIONVACCINATED AS
-  SELECT deaths.country, deaths.date, deaths.population, vaccinations.new_vaccinations
-, SUM(CAST (VACCINATIONS.NEW_VACCINATIONS AS INT)) OVER (PARTITION BY DEATHS.COUNTRY ORDER BY DEATHS.COUNTRY,
-DEATHS.DATE) AS RollingPeopleVaccinated
-FROM PortfolioProject..CovidDeaths DEATHS
-JOIN PORTFOLIOPROJECT..COVIDVACCINATIONS VACCINATIONS
-ON DEATHS.COUNTRY = VACCINATIONS.COUNTRY
-AND DEATHS.DATE = VACCINATIONS.date
-WHERE DEATHS.COUNTRY IS NOT NULL
---order by 2,3  
+CREATE VIEW PERCENTPOPULATIONVACCINATED AS
+SELECT deaths.country, deaths.date, deaths.population, vaccinations.new_vaccinations,
+  SUM(CAST(VACCINATIONS.NEW_VACCINATIONS AS INT)) OVER (PARTITION BY DEATHS.COUNTRY ORDER BY DEATHS.COUNTRY, DEATHS.DATE) AS RollingPeopleVaccinated
+FROM PortfolioProject..CovidDeaths deaths
+JOIN PortfolioProject..CovidVaccinations vaccinations
+  ON deaths.country = vaccinations.country
+  AND deaths.date = vaccinations.date
+WHERE deaths.country IS NOT NULL;
+-- ORDER BY 2, 3
+
 
